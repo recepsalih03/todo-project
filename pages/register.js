@@ -1,10 +1,23 @@
-import { FcGoogle } from 'react-icons/fc';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '../firebase/firebase_api'; // doğru yolu kullanarak import edin
 
 const RegisterForm = () => {
-    const handleSubmit = (e) => {
+    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+
+    const signUpHandler = async (e) => {
         e.preventDefault();
-        // Form submission logic
+        if (!name || !email || !password) return;
+        try {
+            const { user } = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(auth.currentUser, {displayName: name})
+            console.log(user);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -13,26 +26,25 @@ const RegisterForm = () => {
                 <h1 className="text-4xl font-semibold text-center">Sign Up</h1>
                 <p className="mt-4 text-center">
                     Already have an account?{" "}
-                    <Link href = {"/login"} className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Login</Link>
+                    <Link href="/login" className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Login</Link>
                 </p>
-                <div className='bg-gray-800 text-white w-full py-2 mt-6 rounded-full transition-transform hover:bg-gray-900 active:scale-95 flex justify-center items-center gap-2 cursor-pointer group'>
-                    <FcGoogle size={22}/>
-                    <span>Login with Google</span>
-                </div>
-                <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                <form onSubmit={signUpHandler} className="mt-8 space-y-6">
                     <div className="flex flex-col">
                         <label className="mb-2 text-sm font-medium">Name</label>
-                        <input type="text" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500' required/>
+                        <input type="text" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
+                            required onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
                         <label className="mb-2 text-sm font-medium">Email</label>
-                        <input type="email" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500' required/>
+                        <input type="email" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
+                            required onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
                         <label className="mb-2 text-sm font-medium">Password</label>
-                        <input type="password" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500' required autoComplete="on"/>
+                        <input type="password" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
+                            required autoComplete="on" onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <button className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Sign Up</button>
+                    <button type="submit" className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Sign Up</button>
                 </form>
             </div>
         </main>
