@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../firebase/firebase_api'; // doğru yolu kullanarak import edin
+import { auth } from '../firebase/firebase_api'; 
+import { useAuth } from '@/firebase/auth';
+import { useRouter } from 'next/router';
 
 const RegisterForm = () => {
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const {authUser, isLoading, setAuthUser} = useAuth();
+
+    const router = useRouter()
+
+    useEffect(() => {
+        if (!isLoading && authUser) {
+            router.push("/")
+        }
+    }, [isLoading, authUser] )
 
     const signUpHandler = async (e) => {
         e.preventDefault();
@@ -15,6 +26,11 @@ const RegisterForm = () => {
             const { user } = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(auth.currentUser, {displayName: name})
             console.log(user);
+            setAuthUser({
+                uid: user.uid,
+                email: user.email,
+                name: user.displayName,
+            })
         } catch (error) {
             console.error(error);
         }

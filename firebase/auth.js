@@ -20,14 +20,15 @@ export default function useFirebaseAuth() {
         setIsLoading(true);
         if (!user) {
             clearAuth();
-        } else {
+            return
+        } 
             setAuthUser({
                 uid: user.uid,
                 email: user.email,
                 name: user.displayName || 'No name' 
             });
             setIsLoading(false);
-        }
+        
     };
 
     const signOut = () => {

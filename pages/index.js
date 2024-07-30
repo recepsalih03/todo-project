@@ -1,14 +1,31 @@
 import { GoSignOut } from 'react-icons/go';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { MdDeleteForever } from 'react-icons/md';
+import { useAuth } from '@/firebase/auth';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const arr = [1, 2, 3];
 
 export default function Home() {
+
+  const [todoInput, setTodoInput] = useState("")
+  const [todos, setTodos] = useState([])
+
+  const {authUser, isLoading, signOut} = useAuth()
+
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoading && !authUser) {
+        router.push("/login")
+    }
+}, [isLoading, authUser] )
+
   return (
     <main>
       <div className='bg-slate-600 text-white w-44 py-4 mt-5 rounded-lg transition-transform hover:bg-black/[0.8] 
-      active:scale-90 flex items-center justify-center gap-2 font-medium shadow-md fixed bottom-90 right-5 cursor-pointer'>
+      active:scale-90 flex items-center justify-center gap-2 font-medium shadow-md fixed bottom-90 right-5 cursor-pointer' onClick={signOut}>
         <GoSignOut size={15} />
         <span>Logout</span>
       </div>
@@ -27,8 +44,7 @@ export default function Home() {
             className='font-semibold placeholder:text-gray-500 border-[2px] border-black h-[60px] grow shadow-sm rounded-md px-4 
           focus-visible:outline-yellow-400 text-lg transition-all duration-300'
             placeholder='Hello user, please add new todo'
-            autoFocus
-          />
+            autoFocus value={todoInput} onChange={(e) => setTodoInput(e.target.value)}/>
           <button className='w-[60px] h-[60px] rounded-md bg-amber-500 flex justify-center items-center 
           cursor-pointer transition-all duration-300 hover:bg-black/[0.8]'><AiOutlinePlus size={30} /></button>
         </div>
