@@ -12,7 +12,7 @@ const LoginForm = () => {
                 <h1 className="text-4xl font-semibold text-center">Login</h1>
                 <p className="mt-4 text-center">
                     Don't have an account?{" "}
-                    <Link href = {'/register'} className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Sign Up</Link>
+                    <Link href = {"/register"} className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Sign Up</Link>
                 </p>
                 <div className='bg-gray-800 text-white w-full py-2 mt-6 rounded-full transition-transform hover:bg-gray-900 active:scale-95 flex justify-center items-center gap-2 cursor-pointer group'>
                     <FcGoogle size={22}/>
