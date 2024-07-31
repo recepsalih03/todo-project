@@ -122,7 +122,7 @@ export default function Home() {
                 </div>
                 <div className='flex items-center gap-2 mt-10'>
                     <input
-                        type='text'
+                        type='text' style={{ color: 'black' }}
                         className='font-semibold placeholder:text-gray-500 border-[2px] border-black h-[60px] grow shadow-sm rounded-md px-4 
                         focus-visible:outline-yellow-400 text-lg transition-all duration-300'
                         placeholder={'Merhaba, bugün ne yapacaksınız?'}
