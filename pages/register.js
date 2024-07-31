@@ -43,24 +43,24 @@ const RegisterForm = () => {
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                <h1 className="text-4xl font-semibold text-center">Kayıt Ol</h1>
-                <p className="mt-4 text-center">
+                <h1 style={{ color: 'black' }} className="text-4xl font-semibold text-center">Kayıt Ol</h1>
+                <p style={{ color: 'black' }} className="mt-4 text-center">
                     Hesabınız var mı?{" "}
                     <Link href="/login" className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Giriş Yap</Link>
                 </p>
                 <form onSubmit={signUpHandler} className="mt-8 space-y-6">
                     <div className="flex flex-col">
-                        <label className="mb-2 text-sm font-medium">İsim soyisim</label>
+                        <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">İsim soyisim</label>
                         <input type="text" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
                             required onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
-                        <label className="mb-2 text-sm font-medium">Email</label>
+                        <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Email</label>
                         <input type="email" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
                             required onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
-                        <label className="mb-2 text-sm font-medium">Şifre</label>
+                        <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Şifre</label>
                         <input type="password" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
                             required autoComplete="on" onChange={(e) => setPassword(e.target.value)} />
                     </div>
