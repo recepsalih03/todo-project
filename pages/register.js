@@ -6,31 +6,35 @@ import { useAuth } from '@/firebase/auth';
 import { useRouter } from 'next/router';
 
 const RegisterForm = () => {
+    // useState kullanarak isim, email ve şifre için state'ler oluşturuyoruz.
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+
+    // useAuth hook'u kullanarak authUser, isLoading ve setAuthUser fonksiyonlarını alıyoruz.
     const {authUser, isLoading, setAuthUser} = useAuth();
+    const router = useRouter();
 
-    const router = useRouter()
-
+    // useEffect ile kullanıcı oturumu açık ise anasayfaya yönlendiriyoruz.
     useEffect(() => {
         if (!isLoading && authUser) {
             router.push("/")
         }
-    }, [isLoading, authUser] )
+    }, [isLoading, authUser]);
 
+    // Kullanıcı kayıt işlemi
     const signUpHandler = async (e) => {
         e.preventDefault();
         if (!name || !email || !password) return;
         try {
             const { user } = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(auth.currentUser, {displayName: name})
+            await updateProfile(auth.currentUser, {displayName: name});
             console.log(user);
             setAuthUser({
                 uid: user.uid,
                 email: user.email,
                 name: user.displayName,
-            })
+            });
         } catch (error) {
             console.error(error);
         }

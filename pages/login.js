@@ -6,11 +6,13 @@ import { useAuth } from '@/firebase/auth';
 import { useRouter } from 'next/router';
 
 const LoginForm = () => {
+    // useState kullanarak email ve şifre için state'ler oluşturuyoruz.
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { authUser, isLoading } = useAuth();
     const router = useRouter();
 
+    // Kullanıcı giriş işlemi
     const loginHandler = async (e) => {
         e.preventDefault();
         if (!email || !password) return;
@@ -22,15 +24,17 @@ const LoginForm = () => {
         }
     };
 
+    // Kullanıcı çıkış işlemi
     const logoutHandler = async () => {
         try {
             await signOut(auth);
-            console.log('User logged out');
+            console.log('Kullanıcı çıkış yaptı');
         } catch (error) {
             console.error(error);
         }
     };
 
+    // useEffect ile kullanıcı oturumu açık ise anasayfaya yönlendiriyoruz.
     useEffect(() => {
         if (!isLoading && authUser) {
             const timer = setTimeout(() => {
@@ -42,7 +46,7 @@ const LoginForm = () => {
     }, [isLoading, authUser, router]);
 
     if (isLoading) {
-        return "loading";
+        return "yükleniyor";
     }
 
     if (authUser) {
