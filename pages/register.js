@@ -5,38 +5,66 @@ import { auth } from '../firebase/firebase_api';
 import { useAuth } from '@/firebase/auth';
 import { useRouter } from 'next/router';
 
+// RegisterForm bileşeni tanımı
 const RegisterForm = () => {
-    // useState kullanarak isim, email ve şifre için state'ler oluşturuyoruz.
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
-
-    // useAuth hook'u kullanarak authUser, isLoading ve setAuthUser fonksiyonlarını alıyoruz.
-    const {authUser, isLoading, setAuthUser} = useAuth();
+    // name, email ve password için state değişkenleri
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    // Hata mesajlarını depolamak için error state'i
+    const [error, setError] = useState('');
+    // Kullanıcı doğrulama durumunu ve yükleme durumunu almak için custom hook kullanımı
+    const { authUser, isLoading, setAuthUser } = useAuth();
     const router = useRouter();
 
-    // useEffect ile kullanıcı oturumu açık ise anasayfaya yönlendiriyoruz.
+    // Email doğrulama fonksiyonu
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    };
+
+    // Kullanıcı doğrulandıktan sonra anasayfaya yönlendirme
     useEffect(() => {
         if (!isLoading && authUser) {
-            router.push("/")
+            router.push("/");
         }
-    }, [isLoading, authUser]);
+    }, [isLoading, authUser, router]);
 
-    // Kullanıcı kayıt işlemi
+    // Kayıt formu gönderildiğinde çalışacak fonksiyon
     const signUpHandler = async (e) => {
         e.preventDefault();
-        if (!name || !email || !password) return;
+        setError(''); // Önceki hataları temizle
+
+        // Gerekli alanların kontrolü
+        if (!name || !email || !password) {
+            setError('Tüm alanlar gereklidir.');
+            return;
+        }
+        // Email doğrulaması
+        if (!validateEmail(email)) {
+            setError('Geçerli bir email giriniz.');
+            return;
+        }
+        // Şifre uzunluğunun kontrolü
+        if (password.length < 8) {
+            setError('Şifre en az 8 karakter olmalıdır.');
+            return;
+        }
         try {
+            // Firebase ile kullanıcı oluşturma
             const { user } = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(auth.currentUser, {displayName: name});
-            console.log(user);
+            // Kullanıcı profilini güncelleme
+            await updateProfile(auth.currentUser, { displayName: name });
+            // authUser state'ini güncelleme
             setAuthUser({
                 uid: user.uid,
                 email: user.email,
                 name: user.displayName,
             });
+            // Kayıttan sonra anasayfaya yönlendirme
+            router.push("/");
         } catch (error) {
-            console.error(error);
+            setError('Kayıt başarısız. Tekrar deneyiniz.');
         }
     };
 
@@ -52,18 +80,19 @@ const RegisterForm = () => {
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">İsim soyisim</label>
                         <input type="text" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
-                            required onChange={(e) => setName(e.target.value)} />
+                            required value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Email</label>
                         <input type="email" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
-                            required onChange={(e) => setEmail(e.target.value)} />
+                            required value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Şifre</label>
                         <input type="password" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
-                            required autoComplete="on" onChange={(e) => setPassword(e.target.value)} />
+                            required autoComplete="on" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                     <button type="submit" className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Kayıt Ol</button>
                 </form>
             </div>

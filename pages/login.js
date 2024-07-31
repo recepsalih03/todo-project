@@ -6,50 +6,66 @@ import { useAuth } from '@/firebase/auth';
 import { useRouter } from 'next/router';
 
 const LoginForm = () => {
-    // useState kullanarak email ve şifre için state'ler oluşturuyoruz.
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const { authUser, isLoading } = useAuth();
     const router = useRouter();
 
-    // Kullanıcı giriş işlemi
+    // Email doğrulama fonksiyonu
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    };
+
+    // Giriş yapma işlemini gerçekleştiren fonksiyon
     const loginHandler = async (e) => {
         e.preventDefault();
-        if (!email || !password) return;
+        setError(''); // Önceki hataları temizle
+
+        // Giriş verilerini doğrulama
+        if (!email || !password) {
+            setError('Email ve şifre gereklidir.');
+            return;
+        }
+        if (!validateEmail(email)) {
+            setError('Geçerli bir email giriniz.');
+            return;
+        }
+        if (password.length < 8) {
+            setError('Şifre en az 8 karakter olmalıdır.');
+            return;
+        }
         try {
-            const { user } = await signInWithEmailAndPassword(auth, email, password);
-            console.log(user);
+            await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
-            console.error(error);
+            setError('Giriş başarısız. Tekrar deneyiniz.');
         }
     };
 
-    // Kullanıcı çıkış işlemi
-    const logoutHandler = async () => {
-        try {
-            await signOut(auth);
-            console.log('User logged out');
-            console.log('Kullanıcı çıkış yaptı');
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // useEffect ile kullanıcı oturumu açık ise anasayfaya yönlendiriyoruz.
+    // Kullanıcı giriş yapmışsa anasayfaya yönlendirme
     useEffect(() => {
         if (!isLoading && authUser) {
-            const timer = setTimeout(() => {
-                router.push("/");
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            router.push("/");
         }
     }, [isLoading, authUser, router]);
 
+    // Kullanıcı çıkış yapma işlemi
+    const logoutHandler = async () => {
+        try {
+            await signOut(auth); // Firebase'den çıkış yap
+            router.push("/login"); // Giriş sayfasına yönlendir
+        } catch (error) {
+            console.error('Çıkış yapma işlemi sırasında bir hata oluştu:', error);
+        }
+    };
+
+    // Yükleme durumu
     if (isLoading) {
-        return "loading";
-        return "yükleniyor";
+        return "Yükleniyor...";
     }
 
+    // Kullanıcı giriş yapmışsa gösterilecek içerik
     if (authUser) {
         return (
             <main className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -68,6 +84,8 @@ const LoginForm = () => {
             </main>
         );
     }
+
+    // Giriş yapma formu
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
@@ -80,13 +98,14 @@ const LoginForm = () => {
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Email</label>
                         <input type="email" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
-                            required onChange={(e) => setEmail(e.target.value)} />
+                            required value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Şifre</label>
                         <input type="password" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
-                            required autoComplete="on" onChange={(e) => setPassword(e.target.value)} />
+                            required autoComplete="on" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                     <button type="submit" className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Giriş Yap</button>
                 </form>
             </div>
