@@ -79,12 +79,12 @@ const LoginForm = () => {
                 <form onSubmit={loginHandler} className="mt-8 space-y-6">
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Email</label>
-                        <input type="email" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
+                        <input type="email" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
                             required onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
                         <label style={{ color: 'black' }} className="mb-2 text-sm font-medium">Şifre</label>
-                        <input type="password" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
+                        <input type="password" style={{ color: 'black' }} className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
                             required autoComplete="on" onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <button type="submit" className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Giriş Yap</button>

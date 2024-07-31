@@ -116,8 +116,8 @@ export default function Home() {
             <div className='max-w-3xl mx-auto mt-10 p-8'>
                 <div className='bg-white m-6 p-3 top-0'>
                     <div className='flex justify-center flex-col items-center'>
-                        <span className='text-7xl mb-10 font-bold text-center' style={{ marginTop: '-110px' }}>Hayatınızı ve işinizi düzenleyin</span>
-                        <h1 className='text-5xl md:text-7xl font-bold text-cyan-600' style={{ marginTop: '70px' }}>Yapılacaklar Listesi</h1>
+                        <span className='text-7xl mb-10 font-bold text-center'>Hayatınızı ve işinizi düzenleyin</span>
+                        <h1 className='text-5xl md:text-7xl font-bold text-cyan-600'>Yapılacaklar Listesi</h1>
                     </div>
                 </div>
                 <div className='flex items-center gap-2 mt-10'>
