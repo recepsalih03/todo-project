@@ -28,6 +28,7 @@ const LoginForm = () => {
     const logoutHandler = async () => {
         try {
             await signOut(auth);
+            console.log('User logged out');
             console.log('Kullanıcı çıkış yaptı');
         } catch (error) {
             console.error(error);
@@ -40,12 +41,12 @@ const LoginForm = () => {
             const timer = setTimeout(() => {
                 router.push("/");
             }, 3000); 
-
             return () => clearTimeout(timer); 
         }
     }, [isLoading, authUser, router]);
 
     if (isLoading) {
+        return "loading";
         return "yükleniyor";
     }
 
@@ -67,7 +68,6 @@ const LoginForm = () => {
             </main>
         );
     }
-
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">

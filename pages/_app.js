@@ -6,7 +6,7 @@ export default function App({ Component, pageProps }) {
     return (
         <>
             <Head>
-                <title>Todo App</title>
+                <title>Yapılacaklar Listesi</title>
             </Head>
             <AuthUserProvider>
                 <Component {...pageProps} />
