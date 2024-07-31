@@ -35,7 +35,7 @@ const LoginForm = () => {
         if (!isLoading && authUser) {
             const timer = setTimeout(() => {
                 router.push("/");
-            }, 3000); // 3 saniye sonra yönlendir
+            }, 3000); 
 
             return () => clearTimeout(timer); 
         }
@@ -49,15 +49,15 @@ const LoginForm = () => {
         return (
             <main className="flex items-center justify-center min-h-screen bg-gray-100">
                 <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                    <h1 className="text-4xl font-semibold text-center">You are logged in</h1>
-                    <p className="text-center mt-4">Redirecting to home page...</p>
+                    <h1 className="text-4xl font-semibold text-center">Giriş yaptınız</h1>
+                    <p className="text-center mt-4">Anasayfaya yönlendiriliyorsunuz...</p>
                     <Link href="/" legacyBehavior>
-                        <a className="block text-center mt-2 text-blue-500 underline">Go to Home Page</a>
+                        <a className="block text-center mt-2 text-blue-500 underline">Anasayfaya git</a>
                     </Link>
                     <button 
                         onClick={logoutHandler} 
                         className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>
-                        Logout
+                        Çıkış Yap
                     </button>
                 </div>
             </main>
@@ -67,10 +67,10 @@ const LoginForm = () => {
     return (
         <main className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                <h1 className="text-4xl font-semibold text-center">Login</h1>
+                <h1 className="text-4xl font-semibold text-center">Giriş Yap</h1>
                 <p className="mt-4 text-center">
-                    Don&apos;t have an account?{" "}
-                    <Link href="/register" className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Sign Up</Link>
+                    Hesabınız yok mu?{" "}
+                    <Link href="/register" className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Kayıt Ol</Link>
                 </p>
                 <form onSubmit={loginHandler} className="mt-8 space-y-6">
                     <div className="flex flex-col">
@@ -79,11 +79,11 @@ const LoginForm = () => {
                             required onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="flex flex-col">
-                        <label className="mb-2 text-sm font-medium">Password</label>
+                        <label className="mb-2 text-sm font-medium">Şifre</label>
                         <input type="password" className='font-medium border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500'
                             required autoComplete="on" onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <button type="submit" className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Login</button>
+                    <button type="submit" className='bg-gray-800 text-white w-full py-2 mt-4 rounded-full transition-transform hover:bg-gray-900 active:scale-95'>Giriş Yap</button>
                 </form>
             </div>
         </main>

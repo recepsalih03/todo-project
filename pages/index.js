@@ -32,7 +32,7 @@ export default function Home() {
       });
       console.log("Document written with ID:", docRef.id);
       setTodos([...todos, { id: docRef.id, owner: authUser.uid, description: todoInput, completed: false }]);
-      setTodoInput(""); // Input'u temizle
+      setTodoInput("");
     } catch (error) {
       console.error(error);
     }
@@ -88,15 +88,15 @@ export default function Home() {
         onClick={signOut}
       >
         <GoSignOut size={15} />
-        <span>Logout</span>
+        <span>Çıkış yap</span>
       </div>
       <br />
       <br />
       <div className='max-w-3xl mx-auto mt-10 p-8'>
-        <div className='bg-white m-6 p-3 sticky top-0'>
+        <div className='bg-white m-6 p-3 top-0'>
           <div className='flex justify-center flex-col items-center'>
-            <span className='text-7xl mb-10 font-bold text-center'>Organize your life and work</span>
-            <h1 className='text-5xl md:text-7xl font-bold text-cyan-600'>To Do List</h1>
+          <span className='text-7xl mb-10 font-bold text-center' style={{ marginTop: '-110px' }}>Hayatınızı ve işinizi düzenleyin</span>
+            <h1 className='text-5xl md:text-7xl font-bold text-cyan-600' style={{ marginTop: '70px' }}>Yapılacaklar Listesi</h1>
           </div>
         </div>
         <div className='flex items-center gap-2 mt-10'>
@@ -104,7 +104,7 @@ export default function Home() {
             type='text'
             className='font-semibold placeholder:text-gray-500 border-[2px] border-black h-[60px] grow shadow-sm rounded-md px-4 
             focus-visible:outline-yellow-400 text-lg transition-all duration-300'
-            placeholder={'Hello, please add new todo'}
+            placeholder={'Merhaba, bugün ne yapacaksınız?'}
             autoFocus value={todoInput} onChange={(e) => setTodoInput(e.target.value)} onKeyUp={onKeyUp}
           />
           <button

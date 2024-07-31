@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.sticky-header {
+  margin-top: -80px;
+}
