@@ -1,3 +1,4 @@
+import Navbar from '../components/navbar'; // Navbar bileşenini import edin
 import { GoSignOut } from 'react-icons/go';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { MdDeleteForever } from 'react-icons/md';
@@ -5,7 +6,7 @@ import { useAuth } from '@/firebase/auth';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { collection, addDoc, query, where, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { db, auth } from '@/firebase/firebase_api'; // `auth` importunu ekleyin
+import { db } from '@/firebase/firebase_api'; // `auth` importunu kaldırdık
 
 export default function Home() {
     const [todoInput, setTodoInput] = useState("");
@@ -13,7 +14,6 @@ export default function Home() {
     const { authUser, isLoading, signOut } = useAuth(); // `signOut` işlevini kontrol edin
     const router = useRouter();
 
-    // Yüklenirken kullanıcı oturumunu kontrol edin ve giriş yapmamışsa login sayfasına yönlendirin
     useEffect(() => {
         if (!isLoading && !authUser) {
             router.push("/login");
@@ -22,7 +22,6 @@ export default function Home() {
         }
     }, [isLoading, authUser]);
 
-    // Görev oluşturma işlevi
     const CreateTodo = async () => {
         try {
             const docRef = await addDoc(collection(db, "Todo-List"), {
@@ -38,7 +37,6 @@ export default function Home() {
         }
     };
 
-    // Görevleri çekme işlevi
     const fetchTodos = async (uid) => {
         try {
             const q = query(collection(db, "Todo-List"), where("owner", "==", uid));
@@ -54,7 +52,6 @@ export default function Home() {
         }
     };
 
-    // Görev silme işlevi
     const deleteTodo = async (docId) => {
         try {
             await deleteDoc(doc(db, 'Todo-List', docId));
@@ -64,7 +61,6 @@ export default function Home() {
         }
     };
 
-    // Görev tamamlanma işlevi
     const checkedTodo = async (e, docId) => {
         try {
             const docRef = doc(db, "Todo-List", docId);
@@ -77,32 +73,30 @@ export default function Home() {
         }
     };
 
-    // Enter tuşuna basıldığında görev oluşturma işlevi
     const onKeyUp = (e) => {
         if (e.key === "Enter" && todoInput.length > 0) {
             CreateTodo();
         }
     };
 
-    // Çıkış yapma işlevi
     const handleSignOut = async () => {
         console.log("Çıkış yapma isteği başladı");
         try {
-            await signOut(auth);
+            await signOut();
             console.log('Kullanıcı çıkış yaptı');
-            router.push("/login"); // Çıkış yaptıktan sonra yönlendirme
+            router.push("/login");
         } catch (error) {
             console.error('Çıkış yapma işlemi sırasında bir hata oluştu:', error);
         }
     };
 
-    // Yükleniyor durumu
     if (isLoading) {
         return <div>Yükleniyor...</div>;
     }
 
     return (
         <main>
+            <Navbar />
             <div
                 className='bg-slate-600 text-white w-44 py-4 mt-5 rounded-lg transition-transform hover:bg-black/[0.8] 
                 active:scale-90 flex items-center justify-center gap-2 font-medium shadow-md fixed bottom-90 right-5 cursor-pointer'
