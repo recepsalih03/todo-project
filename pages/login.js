@@ -69,7 +69,7 @@ const LoginForm = () => {
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-4xl font-semibold text-center">Login</h1>
                 <p className="mt-4 text-center">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link href="/register" className="text-blue-500 underline hover:text-blue-700 cursor-pointer">Sign Up</Link>
                 </p>
                 <form onSubmit={loginHandler} className="mt-8 space-y-6">
